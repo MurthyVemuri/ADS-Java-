@@ -1,0 +1,122 @@
+import java.util.Scanner;
+import java.util.*;
+class UnboundArray<E> {
+	int size;
+	int capacity;
+	E[] arrayObject;
+	int beta;
+	int alpha;
+	int count;
+	String output = null;
+	
+	@SuppressWarnings("unchecked")
+	UnboundArray() {
+		capacity = 1;
+		size = 0;
+		count = 0;
+		arrayObject = (E[])new Object[capacity];
+	}    
+
+	public void setBeta(int value) {
+		this.beta = value;
+	}    
+
+	public void setAlpha(int value) {
+		this.alpha = value;
+	}    
+
+	public void push(E element) {
+		if(getCapacity() == 1 && size == 0){
+			output = 1+",";
+			System.out.println(1+",");
+	    }
+
+		if (size == capacity) {
+			reallocate(beta * size);
+			output += getCapacity()+",";
+			System.out.println(getCapacity()+",");
+			count++;
+			// print();
+		}
+		arrayObject[size] = element;
+		size++;
+	}
+
+	public void pop() {
+		if (size == 0) {
+			System.out.println("Array is Empty");
+			reallocate(1);
+		} else {
+		
+		arrayObject[size-1] = null;
+		size--;
+
+		if (alpha * size <= capacity  && size > 0) {
+			reallocate(beta * size);
+			count++;
+			output += getCapacity();
+			System.out.println(getCapacity());
+		}
+	}
+
+	if(count == capacity)
+		System.out.println(output);
+	}
+	
+	@SuppressWarnings("unchecked")    
+	public void reallocate(int nSize) {
+		capacity = nSize;
+		E[] temArr = (E[])new Object[capacity];
+		
+		for (int i = 0; i < size; i++) {
+			temArr[i] = arrayObject[i];    
+		}
+		arrayObject = temArr;
+	}    
+
+	public int getCapacity() {
+		return capacity;
+	}   
+
+	public void size() {
+		System.out.println(size);
+	}
+}
+
+
+public class UnboundArrayTest {
+
+	public static void main(String[] args) {
+		UnboundArray<Integer> unbound = new UnboundArray<Integer>();
+		Scanner kb = new Scanner(System.in);
+		String values = kb.nextLine();
+
+		String[] parts = values.split(",");
+		String part1 = parts[0];
+		String part2 = parts[1];
+
+		unbound.setBeta(Integer.parseInt(part1));
+		unbound.setAlpha(Integer.parseInt(part2));
+		
+		String allData = kb.nextLine();
+		String[] divide = allData.split(",");
+
+		for(int i = 0; i < divide.length; i ++) {
+			System.out.println(divide[i]);
+			switch(divide[i]) {
+
+				case "push":
+					unbound.push(0);
+				break;
+
+				case "pop":
+					unbound.pop();
+				break;
+
+				default:
+					System.out.println("Invalid input");
+				break;
+			}
+		}
+	}
+} 

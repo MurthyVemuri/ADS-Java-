@@ -1,0 +1,341 @@
+// Binary search trees implementation.
+
+import java.util.*;
+
+class NodeValue {
+
+	  private int value;
+	  private NodeValue left;
+	  private NodeValue right;
+
+	public NodeValue(int value) {
+		this.value = value;
+	}
+
+	public int getValue() {
+		return this.value;
+	}
+
+	public NodeValue getRight() {
+		return this.right;
+	}
+
+	public NodeValue getLeft() {
+		return this.left;
+	}
+
+	public void setLeft(NodeValue left) {
+		this.left = left;
+	}
+
+	public void setRight(NodeValue right) {
+		this.right = right;
+	}
+}
+
+class BinarySearchTree {
+
+	public NodeValue root;
+	public int countNodes = 0;
+	int largeValue = 0;
+
+	public BinarySearchTree insertValue(int value) {
+		NodeValue node = new NodeValue(value);
+		
+		if (root == null) {
+			root = node;
+			return this;
+		}
+		insertPerfectly(root , node);
+		return this;
+	}
+
+
+	private void insertPerfectly(NodeValue newRoot , NodeValue node) {
+
+		if (newRoot.getValue() > node.getValue()) {
+			if (newRoot.getLeft() == null) {
+				newRoot.setLeft(node);
+				return;
+			} else {
+				insertPerfectly(newRoot.getLeft() , node);
+			}
+		} else {
+			if (newRoot.getRight() == null) {
+				newRoot.setRight(node);
+				return;
+			} else {
+				insertPerfectly(newRoot.getRight() , node);
+			}
+		}
+	}
+
+	public void deleteValue(int value) {
+		try{
+			root = deleteValue(root, value);
+		}catch(Exception e){
+			System.out.print("");
+		}
+
+	}
+
+	private NodeValue deleteValue(NodeValue curRoot, int dataValue) {
+		NodeValue temp, ref, delNode;
+		if (dataValue < curRoot.getValue()) {
+			delNode = deleteValue(curRoot.getLeft(), dataValue);
+			curRoot.setLeft(delNode);
+		} else if (dataValue > curRoot.getValue()){
+			delNode = deleteValue(curRoot.getRight(), dataValue);
+			curRoot.setRight(delNode);             
+		}
+		else {
+			if (curRoot.getLeft() == null && curRoot.getRight() == null)
+				return null;
+			else if (curRoot.getLeft() == null) {
+				temp = curRoot.getRight();
+				return temp;
+			}
+			else if (curRoot.getRight() == null) {
+				temp = curRoot.getLeft();
+				return temp;
+				
+			}
+			else {
+				ref = curRoot.getRight();
+				temp = curRoot.getRight();
+				while (temp.getLeft() != null)
+					temp = temp.getLeft();
+				temp.setLeft(curRoot.getLeft());
+				return ref;
+			}
+		}
+		return curRoot;
+	}
+
+
+	public boolean searchValue(int val) {
+		countNodes = 0;
+		return searchValue(root, val);
+	}
+
+
+	private boolean searchValue(NodeValue newNode, int val) {
+
+		boolean flag = false;
+		while ((newNode != null) && !flag) {
+			countNodes++;
+			if (val < newNode.getValue()){
+				largeValue = newNode.getValue();
+				newNode = newNode.getLeft();
+			} else if (val > newNode.getValue()) {
+				newNode = newNode.getRight();
+			}else{
+				flag = true;
+				break;
+			}
+			flag = searchValue(newNode, val);
+		}
+		return flag;
+	}
+
+	public void printPostorderValues() {
+		if(root == null)
+			System.out.println("0");
+		else {
+			printPostOrder(root);
+			System.out.println();
+		}
+	}
+
+	private void printPostOrder(NodeValue currRoot) {
+		
+		if (currRoot != null) {
+			printPostOrder(currRoot.getLeft());
+			printPostOrder(currRoot.getRight());
+			System.out.print(currRoot.getValue() + " ");
+		}
+	}
+
+	public void printInorderValues() {
+		
+		printInOrder(root);
+		System.out.println();
+	}
+
+
+	private void printInOrder(NodeValue currRoot) {
+		
+		if (currRoot != null) {
+			printInOrder(currRoot.getLeft());
+			System.out.print(currRoot.getValue());
+			System.out.print(" ");
+			printInOrder(currRoot.getRight());
+		}
+	}
+
+	public void levelOrderPrinting() {
+		levelOrderPrinting(root);
+	}
+
+	public void levelOrderPrinting(NodeValue r){
+		Queue<NodeValue> level = new LinkedList<NodeValue>();
+		level.add(r);
+
+		while(!level.isEmpty()){
+			NodeValue node = level.poll();
+			System.out.print(node.getValue() + " ");
+			if(node.getLeft()!= null)
+				level.add(node.getLeft());
+			if(node.getRight()!= null)
+				level.add(node.getRight());
+		}
+	}
+
+
+
+	public int getMin() {
+		if (root == null) {
+			return 0;
+		}
+
+		NodeValue currNode = root;
+		while (currNode.getLeft() != null) {
+			currNode = currNode.getLeft();
+		}
+		return currNode.getValue();
+
+	}
+
+	public int getMax() {
+
+		if (root == null) {
+			return 0;
+		}
+
+		NodeValue currNode = root;
+		while (currNode.getRight()!= null) {
+			currNode = currNode.getRight();
+		}
+		return currNode.getValue();
+	}
+	
+	public int maxDepthTree() {
+		return(maxDepthTree(root));
+	}
+
+	private int maxDepthTree(NodeValue node) {
+		if (node==null) {
+			return(0);
+		} else {
+			int lDepth = maxDepthTree(node.getLeft());
+			int rDepth = maxDepthTree(node.getRight());
+			return(Math.max(lDepth, rDepth) + 1);
+		}
+	}
+}
+
+	 
+
+public class BinaryTreeDemoTest {
+
+	public static void main(String[] args) {
+		BinarySearchTree tree = new BinarySearchTree();
+		Scanner scan = new Scanner(System.in);
+		String output = scan.nextLine();	
+		String[] function = output.split(",");
+		for (int i = 0; i < function.length;i++) {
+
+			if(function[i].contains("I")){
+				String[] val = function[i].split(" ");
+				tree.insertValue(Integer.valueOf(val[1]));
+				tree.printInorderValues();
+
+			}else if(function[i].contains("R")) {
+				String[] rval = function[i].split(" ");
+				tree.deleteValue(Integer.valueOf(rval[1]));
+				tree.printPostorderValues();
+
+			}else if(function[i].contains("S")) {
+				String[] sval = function[i].split(" ");
+				if(tree.searchValue(Integer.valueOf(sval[1])))
+					System.out.println(tree.searchValue(Integer.valueOf(sval[1])) + "," + tree.countNodes );
+				else
+					System.out.println(tree.searchValue(Integer.valueOf(sval[1])) + "," + tree.largeValue );
+
+			}else{
+				break;
+			}
+		}
+	}
+}
+
+
+
+
+	// public int getMin() {
+	// 	if (root == null) {
+	// 		return 0;
+	// 	}
+
+	// 	Node currNode = root;
+	// 	while (currNode.getLeft() != null) {
+	// 		currNode = currNode.getLeft();
+	// 	}
+	// 	return currNode.getValue();
+
+	// }
+
+	// public int getMax() {
+
+	// 	if (root == null) {
+	// 		return 0;
+	// 	}
+
+	// 	Node currNode = root;
+	// 	while (currNode.getRight()!= null) {
+	// 		currNode = currNode.getRight();
+	// 	}
+	// 	return currNode.getValue();
+	// // }
+	// public int maxDepthTree() {
+	// 	return(maxDepthTree(root));
+	// }
+
+	// private int maxDepthTree(Node node) {
+	// 	if (node==null) {
+	// 		return(0);
+	// 	} else {
+	// 		int lDepth = maxDepthTree(node.getLeft());
+	// 		int rDepth = maxDepthTree(node.getRight());
+	// 		return(Math.max(lDepth, rDepth) + 1);
+	// 	}
+	// }
+
+// public class BinaryTreeDemoTest {
+
+// 	public static void main(String[] args) {
+// 		BinarySearchTree tree = new BinarySearchTree();
+// 		Scanner scan = new Scanner(System.in);
+// 		String output = scan.nextLine();	
+// 		String[] function = output.split(",");
+// 		for (int i = 0; i < function.length;i++) {
+// 			if(function[i].contains("I")){
+// 				String[] val = function[i].split(" ");
+// 				tree.insertValue(Integer.valueOf(val[1]));
+// 				tree.printInorderValues();
+// 			}else if(function[i].contains("R")) {
+// 				String[] rval = function[i].split(" ");
+// 				tree.delete(Integer.valueOf(rval[1]));
+// 				tree.printPostorderValues();
+// 			}else if(function[i].contains("S")) 
+// 				String[] sval = function[i].split(" ");
+// 				if(tree.searchValue(Integer.valueOf(sval[1])))
+// 					System.out.println(tree.searchValue(Integer.valueOf(sval[1])) + "," + tree.countNodes );
+// 				else
+// 					System.out.println(tree.searchValue(Integer.valueOf(sval[1])) + "," + tree.getFalseAfterElement());
+// 			}else{
+// 				break;
+// 			}
+// 		}
+// 	}
+// }

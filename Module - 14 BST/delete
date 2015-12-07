@@ -1,0 +1,41 @@
+/*
+	public Node deleteValue(Node root , int data) {
+       Node temp,curRoot;
+       if (root.getItem() == data) {
+           if (root.getLeftChild() == null && root.getRightChild() == null) {
+               return null;
+           }
+           else if (root.getLeftChild() == null) {
+               temp = root.getRightChild();
+               return temp;
+           } else if (root.getRightChild() == null) {
+               temp = root.getLeftChild();
+               curRoot = null;
+
+               while(temp.getRightChild() != null) {
+                   curRoot = temp;
+                   temp = temp.getRightChild();
+               }
+               root.setItem(temp.getItem());
+               curRoot.setRightChild(null);
+               return root;
+           }
+           else {
+               temp = root.getLeftChild();
+               curRoot = null;
+               while(temp.getRightChild() != null) {
+                   curRoot = temp;
+                   temp = temp.getRightChild();
+               }
+               root.setItem(temp.getItem());
+               curRoot.setRightChild(null);
+               return root;
+           }
+       } else if (data < root.getItem()) {
+           root.leftChild = delete(root.getLeftChild(),data);
+       } else if(data > root.getItem()){
+           root.rightChild = delete(root.getRightChild(),data);
+       }
+       return root;
+   } 
+	*/

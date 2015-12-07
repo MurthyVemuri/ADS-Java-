@@ -1,0 +1,1 @@
+hi,this is sample text with out capitalization. you have to fix this problem.hi, how are you? i am fine. thank you. did you solve your first DS problem? hurray! i forgot to solve.
