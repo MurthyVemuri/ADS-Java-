@@ -1,0 +1,2 @@
+# ADS-Java-
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/488d95e3c38242eaa3d735cb2827f8b1)](https://app.codacy.com/app/MurthyVemuri/ADS-Java-?utm_source=github.com&utm_medium=referral&utm_content=MurthyVemuri/ADS-Java-&utm_campaign=badger)
